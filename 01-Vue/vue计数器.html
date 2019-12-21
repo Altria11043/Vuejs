@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>计数器</title>
+</head>
+<body>
+
+<div id="app">
+    <h2>当前计数: {{conter}}</h2>
+<!--    <button v-on:click="conter++">+</button>-->
+<!--    <button v-on:click="conter&#45;&#45;">-</button>-->
+    <button v-on:click="add">+</button>
+    <button v-on:click="sub">-</button>
+</div>
+
+<script src="../js/vue.js"></script>
+<script>
+    const app = new Vue({
+        el: '#app',
+        data: {
+            conter: 0
+        },
+        methods: {
+            add: function() {
+                console.log("+1");
+                // this.conter ++;
+                app.conter ++;
+            },
+            sub: function() {
+                console.log("-1");
+                this.conter --;
+            }
+        }
+    })
+</script>
+</body>
+</html>

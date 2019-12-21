@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>v-bind动态绑定style-对象语法</title>
+</head>
+<body>
+<div id="app">
+  <p :style="{fontSize: '50px', color: 'red'}">{{message}}</p>
+  <p :style="{fontSize: finalSize, color: finalColor}">{{message}}</p>
+  <p :style="getStyles()">{{message}}</p>
+</div>
+
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+      finalSize: '100px',
+      finalColor: 'blue',
+    },
+    methods: {
+      getStyles: function () {
+        return {fontSize: this.finalSize, backgroundColor: this.finalColor}
+      }
+    },
+  })
+</script>
+</body>
+</html>
