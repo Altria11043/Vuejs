@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>v-if和v-else-if和v-else的使用</title>
+</head>
+<body>
+<div id="app">
+  <h2 v-if="score>=90">优先</h2>
+  <h2 v-else-if="score>=80">优先</h2>
+  <h2 v-else-if="score>=60">良</h2>
+  <h2 v-else>不及格</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      score: 99,
+    },
+  })
+</script>
+</body>
+</html>

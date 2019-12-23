@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>v-on的修饰符</title>
+</head>
+<body>
+<div id="app">
+<!--  stop: 阻止冒泡. 在只想触发一个事件的时候, 避免触发两个事件 -->
+  <div @click="divclick">
+    <p>aaa</p>
+    <button @click.stop="btnclick">按钮</button>
+  </div>
+<!--  prevent: 阻止默认事件. 下面是提交表格, 如果需要在点击提交之后还需要对数据做一些修改而不是直接提交数据
+      可以使用prevent修饰符 -->
+  <div>
+    <form action="PUT">
+      <input type="submit" value="提交" @click.prevent="subClick">
+    </form>
+  </div>
+<!--  键修饰符: 监听某个键盘的按键点击-->
+  <div>
+    <p>任意按键都有反应</p>
+    <input type="text" @keyup="keyUp">
+    <p>只有按回车才有反应</p>
+    <input type="text" @keyup.enter="keyUp">
+    <p>只有按下回车才有反应</p>
+    <input type="text" @keydown.enter="keyUp">
+  </div>
+  <div>
+    <button @click.once="btnclick">按钮</button>
+  </div>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    methods: {
+      divclick() {
+        console.log('divclick');
+      },
+      btnclick() {
+        console.log('btnclick');
+      },
+      subClick() {
+        console.log('subClick');
+      },
+      keyUp() {
+        console.log('keyUp');
+      },
+    },
+  })
+</script>
+</body>
+</html>
