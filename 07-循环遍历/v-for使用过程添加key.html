@@ -7,7 +7,7 @@
 <body>
 <div id="app">
   <ul>
-    <li v-for="let in letters">{{let}}</li>
+    <li v-for="item in letters" :key="item">{{item}}</li>
   </ul>
 </div>
 <script src="../js/vue.js"></script>

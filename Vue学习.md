@@ -808,3 +808,67 @@ v-on的参数传递有三种情况:
 
 对象遍历需要注意一点, 这里的key和value的位置互换了, value在前key在后
 
+#### v-for使用过程中添加key
+
+```html
+<div id="app">
+  <ul>
+    <li v-for="item in letters" :key="item">{{item}}</li>
+  </ul>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      letters: ['A', 'B', 'C', 'D', 'E'],
+    },
+  })
+</script>
+```
+
+要注意, 这里的`key`最好是绑定`item`, 因为`index(下标)`会随着数组的变动而变得, 但也要注意, key不能相同
+
+#### 响应式数组
+
+```html
+<div id="app">
+  <ul>
+    <li v-for="item in letters">{{item}}</li>
+  </ul>
+  <button @click="btnClick">按钮</button>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      letters: ['a', 'b', 'c', 'd']
+    },
+    methods: {
+      btnClick(){
+        // 1. push方法可以做到响应式
+        // this.letters.push('Zhou');
+        // 2. 通过索引值修改数组中的元素, 无法响应
+        // this.letters[0] = 'Zhou';
+        // 3. pop(), 删除数组的最后一个元素
+        // this.letters.pop();
+        // 4. shift(), 删除数组的第一个元素
+        // this.letters.shift();
+        // 5. unshift(), 在第一个元素前面添加元素
+        // this.letters.unshift('Zhou');
+        // 6. splice(), 可以删除元素/插入元素/替换元素
+        // 删除, 下标1开始的两个元素, 如果后面的删除元素个数不传入的话, 则下标1后面的元素全部删除
+        // this.letters.splice(1, 2)
+        // 替换, 将下标为1及后面的两个元素替换成给定的元素, 如果给定的元素多余要替换的元素则插入
+        // this.letters.splice(1, 2, 's', 'a', 'Z', '1')
+        // 插入, 第二个元素为0, 则不删除元素且在指定位置插入元素
+        this.letters.splice(1, 0, 's', 'a')
+      },
+    },
+  })
+</script>
+```
+
+数组相关的知识, 以及那些是可以响应式的改变数组元素.  
+
