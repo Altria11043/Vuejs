@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>javascript高阶函数的使用</title>
+</head>
+<body>
+
+<script src="../js/vue.js"></script>
+<script>
+// filter/map/reduce
+// filter中的回调函数有一个要求: 必须返回一个boolean值
+// true: 当返回值true时, 函数内部自动将这次回调的n加入新的数组中
+// false: 当返回值为false时, 函数内部会过滤掉这次的n
+// 1. 需求: 取出小于100的数字
+const nums = [10, 30, 100, 99, 101, 60, 200];
+// 方法一:
+let newNums1 = [];
+for (let n of nums) {
+    if (n < 100){
+      newNums1.push(n)
+    }
+}
+// 方法二:
+let newNums2 = nums.filter(function (n){
+  return n < 100;
+})
+console.log("newNums1: " + newNums1);
+console.log("newNums2: " + newNums2);
+
+// 2. 需求: 将newNums2中的数字乘以2
+// 方法一:
+let newNums3 = [];
+for (let n of newNums2) {
+  newNums3.push(n * 2);
+}
+
+// 方法二:
+let newNums4 = newNums2.map(function (n) {
+  return n * 2;
+})
+console.log('newNums3: ' + newNums3);
+console.log('newNums4: ' + newNums4);
+
+// 3. 需求: 将所有nums的数字相加, 得到最终的结果
+let total1 = 0;
+// 方法一:
+for (let n of nums){
+  total1 += n
+}
+
+// 方法二:
+let tobal2 = nums.reduce(function(preValue, n) {
+  return preValue + n;
+}, 0)
+console.log(total1);
+console.log(tobal2);
+
+// 需求: 将nums中小于100的筛选出来并且乘以2然后相加
+let tobal3 = nums.filter(n => n < 100).map(n => n * 2).reduce((pre, n) => pre + n, 0);
+console.log(tobal3);
+</script>
+</body>
+</html>

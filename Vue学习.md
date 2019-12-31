@@ -872,3 +872,320 @@ v-on的参数传递有三种情况:
 
 数组相关的知识, 以及那些是可以响应式的改变数组元素.  
 
+#### 书籍购物车案例
+
+**index.html**
+
+```html
+<body>
+<div id="app">
+  <div v-if="list.length">
+    <table>
+      <thead>
+      <tr>
+        <th></th>
+        <th>书籍名字</th>
+        <th>出版日期</th>
+        <th>价格</th>
+        <th>购买数量</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr v-for="(item, index) in list">
+        <td>{{item.id}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.date}}</td>
+        <td>{{item.price | showPrice}}</td>
+        <td>
+          <button @click="subClick(index)" :disabled="item.count <= 1">-</button>
+          {{item.count}}
+          <button @click="addClick(index)">+</button>
+        </td>
+        <td>
+          <button @click="removeList(index)">移除</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <h3>总价格: {{totalPrice | showPrice}}</h3>
+  </div>
+  <h2 v-else>购物车为空</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script src="main.js"></script>
+</body>
+```
+
+**main.js**
+
+```javascript
+const app = new Vue({
+  el: '#app',
+  data: {
+    list: [
+      {
+        id: 1,
+        name: 'java编程思想',
+        date: '2019-10',
+        price: 120.00,
+        count: 1
+      },
+      {
+        id: 2,
+        name: 'python',
+        date: '2019-1',
+        price: 90.00,
+        count: 1
+      },
+      {
+        id: 3,
+        name: 'PHP',
+        date: '2019-3',
+        price: 50.00,
+        count: 1
+      },
+      {
+        id: 4,
+        name: '算法',
+        date: '2019-12',
+        price: 45.20,
+        count: 1
+      },
+      {
+        id: 5,
+        name: 'C++',
+        date: '2019-2',
+        price: 84.50,
+        count: 1
+      },
+      {
+        id: 6,
+        name: 'C',
+        date: '2019-7',
+        price: 75.10,
+        count: 1
+      },
+    ]
+  },
+  computed: {
+    totalPrice() {
+      let totalPrice = 0;
+      for (let item of this.list) {
+        totalPrice += item.price * item.count
+      }
+      return totalPrice;
+    },
+  },
+  methods: {
+    addClick(index) {
+      this.list[index].count++;
+    },
+    subClick(index){
+      if (this.list[index].count > 1){
+        this.list[index].count--;
+      }
+    },
+    removeList(index) {
+      this.list.splice(index, 1);
+    },
+    getfinalPrice(){
+
+    },
+  },
+  filters: {
+    showPrice(price) {
+      return '￥' + price.toFixed(2)
+    },
+  },
+})
+```
+
+**style.css**
+
+```css
+table{
+  border: 1px solid #e9e9e9;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th, td {
+  padding: 8px 16px;
+  border: 1px solid #e9e9e9;
+  text-align: left;
+}
+
+th {
+  background-color: #f7f7f7;
+  color: #5c6b77;
+  font-weight: 600;
+}
+```
+
+此案例使用了前面所学的知识进行实现, 还新增了过滤器的概念. 
+
+#### Javascript高阶函数的使用
+
+**filter函数**
+
+```javascript
+// 需求: 取出小于100的数字
+const nums = [10, 30, 100, 99, 101, 60, 200];
+// 方法一:
+let newNums1 = [];
+for (let n of nums) {
+    if (n < 100){
+      newNums1.push(n)
+    }
+}
+// 方法二:
+let newNums2 = nums.filter(function (n){
+  return n < 100;
+})
+console.log("newNums1: " + newNums1);
+console.log("newNums2: " + newNums2);
+```
+
+遍历`nums`数组并将其传入方法中进行判断, `filter`中的回调函数有一个要求: 必须返回一个`boolean`值
+
+`true:` 当返回值`true`时, 函数内部自动将这次回调的n加入新的数组中
+
+`false`: 当返回值为`false`时, 函数内部会过滤掉这次的n
+
+**map函数**
+
+```javascript
+// 需求: 将newNums2中的数字乘以2
+// 方法一:
+let newNums3 = [];
+for (let n of newNums2) {
+  newNums3.push(n * 2);
+}
+
+// 方法二:
+let newNums4 = newNums2.map(function (n) {
+  return n * 2;
+})
+console.log('newNums3: ' + newNums3);
+console.log('newNums4: ' + newNums4);
+```
+
+遍历`newNums2`并返回值到新的数组中
+
+**reduce函数**
+
+```javascript
+// 需求: 将所有nums的数字相加, 得到最终的结果
+let total1 = 0;
+// 方法一:
+for (let n of nums){
+  total1 += n
+}
+
+// 方法二:
+let tobal2 = nums.reduce(function(preValue, n) {
+  return preValue + n;
+}, 0)
+console.log(total1);
+console.log(tobal2);
+```
+
+`nums.reduce(参数一, 参数二)`
+
+`reduce`函数的参数一为方法体, 参数二为初始值
+
+方法体中, **第一个参数**为该方法上一次返回值, 如果没有返回值则使用初始值, **第二个参数**为当前遍历的值. 
+
+#### 箭头函数初接触
+
+将上面的高阶函数使用箭头函数进行简化
+
+```javascript
+// 需求: 将nums中小于100的筛选出来并且乘以2然后相加
+let tobal3 = nums.filter(n => n < 100).map(n => n * 2).reduce((pre, n) => pre + n, 0);
+console.log(tobal3);
+```
+
+## v-model的使用
+
+#### v-model的基本使用
+
+表单控件在实际开发中是非常常见的, 特别是对于用户信息的提交, 需要大量的表单.
+
+`v-model`指令是用来实现表单元素和数据的双向绑定. 
+
+```html
+<div id="app">
+  <input type="text" v-model="message">
+  <h2>{{message}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+  })
+</script>
+```
+
+`v-model`其实是一个语法糖, 它背后本质是两个操作:
+
+1. v-bind绑定一个value属性
+
+2. v-on指令给当前元素绑定input事件
+
+#### v-model与radio结合
+
+```html
+<div id="app">
+  <label for="male">
+    <input type="radio" id="male" value="male" v-model="sex">男
+  </label>
+  <label for="female">
+    <input type="radio" id="female" value="female" v-model="sex">女
+  </label>
+  <h2>{{sex}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+      sex: 'male',
+    },
+  })
+</script>
+```
+
+`radio`中的`v-model`绑定是同一个值的时候, `radio`的两个选项是互斥的.  
+
+#### v-model与checkbox的结合
+
+```html
+<div id="app">
+  <label for="agree">
+    <input type="checkbox" id="agree" v-model="isAgree">同一协议
+  </label>
+  <h2>{{isAgree}}</h2>
+  <input type="checkbox" value="篮球" v-model="hobbies">篮球
+  <input type="checkbox" value="足球" v-model="hobbies">足球
+  <input type="checkbox" value="乒乓球" v-model="hobbies">乒乓球
+  <input type="checkbox" value="羽毛球" v-model="hobbies">羽毛球
+  <h2>{{hobbies}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      isAgree: false,
+      hobbies: [],
+    },
+  })
+</script>
+```
+

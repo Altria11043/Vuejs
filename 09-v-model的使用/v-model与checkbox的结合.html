@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>v-model与checkbox的结合</title>
+</head>
+<body>
+<div id="app">
+  <label for="agree">
+    <input type="checkbox" id="agree" v-model="isAgree">同一协议
+  </label>
+  <h2>{{isAgree}}</h2>
+  <input type="checkbox" value="篮球" v-model="hobbies">篮球
+  <input type="checkbox" value="足球" v-model="hobbies">足球
+  <input type="checkbox" value="乒乓球" v-model="hobbies">乒乓球
+  <input type="checkbox" value="羽毛球" v-model="hobbies">羽毛球
+  <h2>{{hobbies}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      isAgree: false,
+      hobbies: [],
+    },
+  })
+</script>
+</body>
+</html>
