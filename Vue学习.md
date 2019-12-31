@@ -808,3 +808,44 @@ v-on的参数传递有三种情况:
 
 对象遍历需要注意一点, 这里的key和value的位置互换了, value在前key在后
 
+#### v-for作业
+
+使用v-for展示一个列表, 并且实现点击任何行, 该行会被标红, 其他行回复正常颜色. 
+
+```html
+<head>
+  <meta charset="UTF-8">
+  <title>v-for作业</title>
+  <style>
+    .active {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <ul>
+    <li v-for="(item, index) in letters"
+        :class="{active: index === currentIndex}"
+        @click="liClick(index)">
+      {{item}}
+    </li>
+  </ul>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      letters: ['天气之子', '复仇者联盟', '魔童降世', '罗小黑战记'],
+      currentIndex: 0,
+    },
+    methods: {
+      liClick(index) {
+        this.currentIndex = index;
+      },
+    },
+  })
+</script>
+```
+
