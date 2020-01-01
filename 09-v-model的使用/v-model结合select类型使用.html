@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>v-modelselect类型使用</title>
+</head>
+<body>
+<div id="app">
+  <!-- 单选 -->
+  <select name="abc" v-model="fruit">
+    <option value="苹果">苹果</option>
+    <option value="火龙果">火龙果</option>
+    <option value="西瓜">西瓜</option>
+    <option value="梨子">梨子</option>
+  </select>
+  <h2>你选择的水果为: {{fruit}}</h2><br>
+  <!-- 多选 -->
+  <select name="abc" v-model="fruits" multiple>
+    <option value="苹果">苹果</option>
+    <option value="火龙果">火龙果</option>
+    <option value="西瓜">西瓜</option>
+    <option value="梨子">梨子</option>
+  </select>
+  <h2>你选择的水果为: {{fruits}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      fruit: '火龙果',
+      fruits: [],
+    },
+  })
+</script>
+</body>
+</html>

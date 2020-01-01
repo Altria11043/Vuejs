@@ -1176,6 +1176,10 @@ console.log(tobal3);
   <input type="checkbox" value="乒乓球" v-model="hobbies">乒乓球
   <input type="checkbox" value="羽毛球" v-model="hobbies">羽毛球
   <h2>{{hobbies}}</h2>
+  <!-- 下面是优化之后的代码 -->
+  <label v-for="item in originHobbies">
+    <input type="checkbox" :value="item" v-model="hobbies">{{item}}
+  </label>
 </div>
 <script src="../js/vue.js"></script>
 <script>
@@ -1184,8 +1188,111 @@ console.log(tobal3);
     data: {
       isAgree: false,
       hobbies: [],
+      originHobbies: ['篮球', '足球', '乒乓球', '羽毛球', '排球', '橄榄球'],
     },
   })
 </script>
 ```
 
+在后面使用了`v-for`进行了优化, 与label进行了绑定会提升用户的使用体验.
+
+#### v-model与select的结合
+
+```html
+<div id="app">
+  <!-- 单选 -->
+  <select name="abc" v-model="fruit">
+    <option value="苹果">苹果</option>
+    <option value="火龙果">火龙果</option>
+    <option value="西瓜">西瓜</option>
+    <option value="梨子">梨子</option>
+  </select>
+  <h2>你选择的水果为: {{fruit}}</h2><br>
+  <!-- 多选 -->
+  <select name="abc" v-model="fruits" multiple>
+    <option value="苹果">苹果</option>
+    <option value="火龙果">火龙果</option>
+    <option value="西瓜">西瓜</option>
+    <option value="梨子">梨子</option>
+  </select>
+  <h2>你选择的水果为: {{fruits}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      fruit: '火龙果',
+      fruits: [],
+    },
+  })
+</script>
+```
+
+select在后面很少用到, 这里只是留个印象.  
+
+#### v-model的修饰符
+
+**lazy**
+
+```html
+<div id="app">
+  <input type="text" v-model.lazy="message">
+  <h2>{{message}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+  })
+</script>
+```
+
+使用`lazy`修饰之后, 会进行懒加载在输入框失去聚焦之后或敲击回车键之后才会将数据进行绑定.
+
+**number**
+
+```html
+<div id="app">
+  <!-- number的使用 -->
+  <input type="number" v-model.number="age">
+  <h2>{{age}}->{{typeof age}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      age: 0,
+    },
+  })
+</script>
+```
+
+在使用`input`标签的`number`属性时, 与`v-model`进行绑定后, 实际显示的属性类型与预想的不符(0单独出现时除外). 需要使用`number`进行类型转换. 
+
+**trim**
+
+```html
+<div id="app">
+  <!-- trim的使用 -->
+  <input type="text" v-model="name">
+  <h2>你的名字: {{name}}</h2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      name: 'Saber',
+    },
+  })
+</script>
+```
+
+![QQ截图20200101212253](E:\Vuejs\MDImg\QQ截图20200101212253.png)
+
+通常情况下如果不使用`trim`后台会接收输入框中完整的数据, 当然空格也是一样的, 如果不想要前后的空格就可以使`trim`修饰符进行修饰.
