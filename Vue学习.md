@@ -172,7 +172,7 @@ mustache语法中{{}}不仅可以直接填入变量, 还可以写一些简单的
     })
   </script>
   ```
-  
+
 - v-text: 效果与{{message}}所要表达的内容几乎没有区别, 但是不够灵活无法做到Mustache语法的一些复杂操作
 
 - v-pre: 将标签中的内容原封不动的显示出来, 不做任何解
@@ -534,6 +534,7 @@ const被数组赋值之后, 数组内的内容是可以更改的, 只要指向�
 ## v-on使用
 
 #### v-on基本使用
+
 事件监听, 在开发中用于监听用户的操作, 比如点击, 拖拽, 键盘事件等.   
 
 在Vue中使用v-on进行监听.
@@ -570,6 +571,7 @@ const被数组赋值之后, 数组内的内容是可以更改的, 只要指向�
 ```
 
 #### v-on参数传递
+
 v-on的参数传递有三种情况:  
 
 一. 当不需要参数传入的时候, 可以不需要添加括号. 这个时候方法正常执行里面的内容  
@@ -1296,3 +1298,363 @@ select在后面很少用到, 这里只是留个印象.
 ![QQ截图20200101212253](E:\Vuejs\MDImg\QQ截图20200101212253.png)
 
 通常情况下如果不使用`trim`后台会接收输入框中完整的数据, 当然空格也是一样的, 如果不想要前后的空格就可以使`trim`修饰符进行修饰.
+
+# 组件
+
+#### 什么是组件
+
+为了方便管理和后期的维护, 我们需要将一个页面拆分成一个个小的功能块, 每个功能块完成属于自己这部分独立的功能. 
+
+![组件示例1](E:\Vuejs\MDImg\组件示例1.png)
+
+它提供了一种抽象, 让我们可以开发出一个个独立的可复用的小组件来构造我们的应用.
+
+#### 组件的使用
+
+1. 创建组件构造器
+
+   调用`Vue.extend()`方法
+
+2. 注册组件
+
+   调用`Vue.component()`方法
+
+3. 使用组件
+
+   在Vue实例的作用范围内使用组件
+
+#### 组件化的基本使用
+
+```html
+<div id="app">
+  <!-- 3. 使用组件 -->
+  <my-cpn></my-cpn>
+  <my-cpn></my-cpn>
+  <my-cpn></my-cpn>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  // 1. 创建组件构造器
+  const cpnContructor = Vue.extend({
+    template: `
+      <div>
+        <h2>标题</h2>
+        <p>第一段, .......</p>
+        <p>第二段, .......</p>
+      </div>
+    `,
+  });
+  // 2. 注册组件
+  Vue.component('my-cpn', cpnContructor);
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+  })
+</script>
+```
+
+上面的是比较初期的使用方式.
+
+#### 全局组件与局部组件
+
+```html
+<div id="app">
+  <cpn1></cpn1>
+  <cpn2></cpn2>
+</div>
+<cpn1></cpn1>
+<cpn2></cpn2>
+<div id="app2">
+  <cpn1></cpn1>
+  <cpn2></cpn2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  // 组件一
+  const cpnC1 = Vue.extend({
+    template: `
+    <div>
+      <h2>第一段</h2>
+    </div>`,
+  });
+  // 组件二
+  const cpnC2 = Vue.extend({
+    template: `<div>
+      <h2>第二段</h2>
+</div>`,
+  });
+  // 注册全局组件
+  Vue.component('cpn1', cpnC1);
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    // 局部组件的定义
+    components: {
+      cpn2: cpnC2,
+    }
+  })
+
+  const app2 = new Vue({
+    el: '#app2',
+  });
+</script>
+```
+
+运行结果:
+
+![全局组件与局部组件](E:\Vuejs\MDImg\全局组件与局部组件.png)
+
+在上面的运行后的例子中可以看到全局组件与局部组件的区别,
+
+全局组件在`vue`外进行注册, 局部组件在`vue`内进行注册. 
+
+#### 父组件与子组件
+
+```html
+<div id="app">
+  <cpn1></cpn1>
+  <cpn2></cpn2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  const cpnC1 = Vue.extend({
+    template: `
+      <div>
+        <h2>第一段</h2>
+      </div>
+    `,
+  });
+  const cpnC2 = Vue.extend({
+    template: `
+      <div>
+        <h2>第二段</h2>
+        <cpn1></cpn1>
+      </div>
+    `,
+    components: {
+      cpn1: cpnC1,
+    }
+  });
+  const app = new Vue({
+    el: '#app',
+    data: {
+    },
+    components: {
+      cpn1: cpnC1,
+      cpn2: cpnC2,
+    },
+  })
+</script>
+```
+
+![父组件与子组件](E:\Vuejs\MDImg\父组件与子组件.png)
+
+组件之间是可以进行注册的, 也可以把`new Vue()`看成一个根组件, 可以实现的功能差不多. 
+
+#### 组件的语法糖
+
+```html
+<div id="app">
+  <cpn1></cpn1>
+  <cpn2></cpn2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  // 全局组件注册的语法糖
+  const cpn1 = Vue.component('cpn1', {
+    template: `
+      <div>
+        <h2>第一段</h2>
+      </div>`,
+  });
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn2: {
+        template: `
+          <div>
+            <h2>第二段</h2>
+          </div>`,
+      },
+    },
+  })
+</script>
+```
+
+这里的语法糖就是把创建构造器的一步省略了而已.
+
+组件模板的分离写法
+
+```html
+<div id="app">
+  <cpn1></cpn1>
+  <cpn1></cpn1>
+  <cpn1></cpn1>
+</div>
+<template id="cpn1">
+  <div>
+    <h2>标题</h2>
+    <p>第一段</p>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const cpnC1 = Vue.component('cpn1', {
+    template: '#cpn1',
+  });
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+  })
+</script>
+```
+
+这里暂时就只有这种分离写法比较好, 后面还有更好的写法可以用.  
+
+#### 组件数据的存放
+
+组件的数据是不能存储在`vue实例`中的, 需要存储在组件自己内部.  因此组件内也有一个`data属性`.
+
+但是`data属性`必须是一个函数. 而且这个对象返回一个对象, 对象内部保存着数据.  
+
+```html
+<div id="app">
+  <h2>{{message}}</h2>
+  <cpn1></cpn1>
+</div>
+<template id="cpn1">
+  <div>
+    <h2>{{title}}</h2>
+    <p>{{contents}}</p>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  Vue.component('cpn1', {
+    template: '#cpn1',
+    data() {
+      return {
+        title: '这里是测试标题',
+        contents: '内容存储',
+      }
+    }
+  })
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+  })
+</script>
+```
+
+data之所以是一个函数, 是为了避免一个组件多用的时候会出现连锁反应, 导致更改一个组件导致其他地方的相同组件一起被更改.
+
+#### 父子组件的通信
+
+在开发过程中需要将一些数据从上层传递到下层.
+
+比如在一个页面中, 我们从服务器请求到很多数据. 其中一部分数据, 并非是我们整个页面的大组件来展示的, 而是需要下面的子组件进行展示. 这个时候并不会让子组件再次发送一个网络请求, 而是直接让大组件(父组件)将数据传递给小组件(子组件). 
+
+**如何进行信息传递呢?**
+
+通过props向子组件传递数据. 通过事件向父组件发送消息.
+
+**props的基本使用**
+
+```html
+<div id="app">
+  <cpn :cmovies="movies" :cmessage="message"></cpn>
+</div>
+<template id="cpn">
+  <div>
+    <h2>标题: {{cmessage}}</h2>
+    <p v-for="item in cmovies">{{item}}</p>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const cpn = {
+    template: '#cpn',
+    // 使用数组类型进行数据传递
+    // props: ['cmovies', 'cmessage'],
+    // 使用对象类型进行数据进行传递(优点: 可以对传入的数据进行数据限制和提供默认值)
+    props: {
+      // cmovies: Array,
+      cmessage: {
+        type: String,
+        default: 'AAAA',
+        required: true, // 该属性是必传的
+      },
+      cmoives: {
+        type: Array,
+        // 数组类型如果按照上面的方式设置默认值会报错
+        default() {
+          return []
+        },
+      }
+    },
+  }
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+      movies: ['复仇者联盟1', '复仇者联盟2', '复仇者联盟3', '复仇者联盟4', '钢铁侠1', '钢铁侠2', '钢铁侠3',],
+    },
+    components: {
+      cpn
+    },
+  })
+</script>
+```
+
+父组件向子组件进行数据传递需要先将数据进行绑定`<cpn :cmovies="movies" :cmessage="message"></cpn>`, 这样父组件的数据就可以传递到子组件下.
+
+在子组件中使用`props`进行数据接收, 接收方式有两种: 
+
+1. `props: ['cmovies', 'cmessage']`使用数组的方式接收
+
+2. 使用对象的方式进行接收, 对象接收数据有两方法:
+
+   1. ```javascript
+      props: {
+            cmovies: Array,
+            cmessage: String,
+          },
+      ```
+
+   2. ```javascript
+      props: {
+            cmessage: {
+              type: String,
+              default: 'AAAA',
+              required: true, // 该属性是必传的
+            },
+            cmoives: {
+              type: Array,
+              // 数组类型如果按照上面的方式设置默认值会报错
+              default() {
+                return []
+              },
+            }
+          },
+      ```
+
+   第一种是直接对数据传入的类型进行限制, 没有做其他操作
+
+   第二种在对传入类型的限制之外还有对其默认值和是否必传进行了限制
+
+这里还有一些其他的方法:
+
+<img src="E:\Vuejs\MDImg\父组件与子组件的数据传递.png" alt="父组件与子组件的数据传递" style="zoom:150%;" />
+
+![父组件与子组件的数据传递2](E:\Vuejs\MDImg\父组件与子组件的数据传递2.png)

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>全局组件与局部组件</title>
+</head>
+<body>
+<div id="app">
+  <cpn1></cpn1>
+  <cpn2></cpn2>
+</div>
+<cpn1></cpn1>
+<cpn2></cpn2>
+<div id="app2">
+  <cpn1></cpn1>
+  <cpn2></cpn2>
+</div>
+<script src="../js/vue.js"></script>
+<script>
+  // 组件一
+  const cpnC1 = Vue.extend({
+    template: `
+    <div>
+      <h2>第一段</h2>
+    </div>`,
+  });
+  // 组件二
+  const cpnC2 = Vue.extend({
+    template: `<div>
+      <h2>第二段</h2>
+</div>`,
+  });
+  // 注册全局组件
+  Vue.component('cpn1', cpnC1);
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    // 局部组件的定义
+    components: {
+      cpn2: cpnC2,
+    }
+  })
+
+  const app2 = new Vue({
+    el: '#app2',
+  });
+</script>
+</body>
+</html>
