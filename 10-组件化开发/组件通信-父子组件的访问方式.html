@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件通信-父子组件的访问方式</title>
+</head>
+<body>
+<div id="app">
+  <cpn ref="a"></cpn>
+  <cpn ref="b"></cpn>
+  <cpn ref="c"></cpn>
+  <button @click="btnclick">按钮</button>
+</div>
+<template id="cpn">
+  <div>
+    我是子组件
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+    },
+    methods: {
+      btnclick() {
+        // console.log(this.$children); // 在浏览器中可以查到`$children`中获取到了三个子组件的信息, 其中就有`showMethod`方法
+        // this.$children[0].showMethod();
+        // console.log(this.$children[0].name);
+        console.log(this.$refs);
+        this.$refs.a.showMethod();
+        console.log(this.$refs.a.name);
+      }
+    },
+    components: {
+      cpn: {
+        template: '#cpn',
+        data() {
+          return {
+            name: '我的名字是...',
+          }
+        },
+        methods: {
+          showMethod(){
+            console.log('showMethod');
+          }
+        }
+      }
+    }
+  })
+</script>
+</body>
+</html>
