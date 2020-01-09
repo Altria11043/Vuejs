@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件通信-父子组件双向绑定</title>
+</head>
+<body>
+<div id="app">
+  <cpn :cnumber1="num1"
+       :cnumber2="num2"
+       @cpnnumer1="vnumber1"
+       @cpnnumer2="vnumber2"/>
+</div>
+
+<template id="cpn">
+  <div>
+    <h2>props: {{cnumber1}}</h2>
+    <h2>data: {{number1}}</h2>
+    <input type="text" :value="cnumber1" @input="cnum1Input">
+    <h2>props: {{cnumber2}}</h2>
+    <h2>data: {{number2}}</h2>
+    <input type="text" :value="cnumber2" @input="cnum2Input">
+  </div>
+</template>
+
+<script src="../js/vue.js"></script>
+<script>
+  const cpn = {
+    template: '#cpn',
+    props: {
+      cnumber1: {
+        type: Number,
+        default: 0
+      },
+      cnumber2: {
+        type: Number,
+        default: 0
+      }
+    },
+    data() {
+      return {
+        number1: this.cnumber1,
+        number2: this.cnumber2
+      }
+    },
+    methods: {
+      cnum1Input(event) {
+        this.number1 = event.target.value;
+        this.$emit('cpnnumer1', this.number1)
+      },
+      cnum2Input(event) {
+        this.number2 = event.target.value;
+        this.$emit('cpnnumer2', this.number2)
+      }
+    }
+  }
+  const app = new Vue({
+    el: '#app',
+    data: {
+      num1: 0,
+      num2: 0
+    },
+    methods: {
+      vnumber1(value){
+        this.num1 = parseFloat(value)
+      },
+      vnumber2(value){
+        this.num2 = parseFloat(value)
+      }
+    },
+    components: {
+      cpn
+    }
+  })
+</script>
+</body>
+</html>

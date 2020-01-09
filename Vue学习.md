@@ -10,7 +10,7 @@
 <script src="../js/vue.js"></script>
 ```
 
-![示例1](E:\Java\前端相关\img\1.png)
+![示例1](\..\img\1.png)
 
 #### HelloVueJs
 
@@ -36,7 +36,7 @@
 
 data则是对数据进行管理, 在data中的message可以在div中的{{message}}(这里的双大括号是Mustache语法)中展示出来
 
-![示例1](E:\Java\前端相关\img\示例1.png)
+![示例1](\..\img\示例1.png)
 
 let: 定义变量 / const: 定义常量
 
@@ -61,7 +61,7 @@ let: 定义变量 / const: 定义常量
 
 其中v-for将message中的数组元素赋值给item
 
-![示例2](E:\Java\前端相关\img\示例2.png)
+![示例2](\..\img\示例2.png)
 
 #### 计数器
 
@@ -103,7 +103,7 @@ v-on:click="conter++"可以直接对数据进行修改, 但是这样只能编写
 
 WebStorm中可以进行模板设置, 这样就可以避免每次新建html文件之后还要重复填写一些基本代码
 
-![示例3](E:\Java\前端相关\img\示例3.png)
+![示例3](\..\img\示例3.png)
 
 添加新的模板, 并将下面代码填入Template text中: 
 
@@ -124,7 +124,7 @@ WebStorm中可以进行模板设置, 这样就可以避免每次新建html文件
 
 然后再进行一些修改, 就可以再html页面中输入'vue'然后按空格出现上面代码
 
-![示例4](E:\Java\前端相关\img\示例4.png)
+![示例4](\..\img\示例4.png)
 
 ## 插值操作
 
@@ -464,11 +464,11 @@ v-bind有个简单的缩写, 就是在属性前面添加一个`:`也可以达到
 
 使用methods后台的执行情况
 
-![计算属性示例1](E:\Java\前端相关\img\计算属性示例1.png)
+![计算属性示例1](\..\img\计算属性示例1.png)
 
 使用computed的使用情况
 
-![计算属性示例2](E:\Java\前端相关\img\计算属性示例2.png)
+![计算属性示例2](\..\img\计算属性示例2.png)
 
 通过上面的情况可以看出computed在后台只执行了一次, 只要数据不变动就不在执行第二次, 就**性能来看computed的性能优于methods**
 
@@ -741,9 +741,9 @@ v-on的参数传递有三种情况:
 </script>
 ```
 
-![v-show1](E:\Java\前端相关\img\v-show1.png)
+![v-show1](\..\img\v-show1.png)
 
-![v-show2](E:\Java\前端相关\img\v-show2.png)
+![v-show2](\..\img\v-show2.png)
 
 从上面的图片中可以看出, 当`v-show`为false的时候标签还在只是不显示了, `v-if`是标签都被删除了
 
@@ -1295,7 +1295,7 @@ select在后面很少用到, 这里只是留个印象.
 </script>
 ```
 
-![QQ截图20200101212253](E:\Vuejs\MDImg\QQ截图20200101212253.png)
+![QQ截图20200101212253](\..\img\QQ截图20200101212253.png)
 
 通常情况下如果不使用`trim`后台会接收输入框中完整的数据, 当然空格也是一样的, 如果不想要前后的空格就可以使`trim`修饰符进行修饰.
 
@@ -1406,7 +1406,7 @@ select在后面很少用到, 这里只是留个印象.
 
 运行结果:
 
-![全局组件与局部组件](E:\Vuejs\MDImg\全局组件与局部组件.png)
+![全局组件与局部组件](\..\img\全局组件与局部组件.png)
 
 在上面的运行后的例子中可以看到全局组件与局部组件的区别,
 
@@ -1451,7 +1451,7 @@ select在后面很少用到, 这里只是留个印象.
 </script>
 ```
 
-![父组件与子组件](E:\Vuejs\MDImg\父组件与子组件.png)
+![父组件与子组件](\..\img\父组件与子组件.png)
 
 组件之间是可以进行注册的, 也可以把`new Vue()`看成一个根组件, 可以实现的功能差不多. 
 
@@ -1660,6 +1660,72 @@ data之所以是一个函数, 是为了避免一个组件多用的时候会出�
 
 这里还有一些其他的方法:
 
-<img src="E:\Vuejs\MDImg\父组件与子组件的数据传递.png" alt="父组件与子组件的数据传递" style="zoom:150%;" />
+<img src="\..\img\父组件与子组件的数据传递.png" alt="父组件与子组件的数据传递" style="zoom:150%;" />
 
-![父组件与子组件的数据传递2](E:\Vuejs\MDImg\父组件与子组件的数据传递2.png)
+![父组件与子组件的数据传递2](\..\img\父组件与子组件的数据传递2.png)
+
+**子组件向父组件传递数据**
+
+`props`用于父组件向子组件传递数据, 子组件向父组件传递数据则需要使用到自定义事件来完成.  
+
+什么时候需要自定义事件:
+
+1. 当子组件需要向父组件传递数据时, 就要用到自定义事件
+2. 我们之前学习的`v-on`不仅仅可以用于监听DOM事件, 也可以用于组件间的自定义事件
+
+使用流程:
+
+1. 在子组件中, 通过`$emit()`来触发事件
+2. 在父组件中, 通过v-on来监听组件事件
+
+```html
+<div id="app">
+  <cpn @itemclick="cpnclick"></cpn>
+</div>
+<template id="cpn">
+  <div>
+    <button v-for="item in categories"
+            @click="btnClick(item)">
+      {{item.name}}
+    </button>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const cpn = {
+    template: '#cpn',
+    props: {
+    },
+    data() {
+      return {
+        categories: [
+          {id: '1', name: '热门推荐'},
+          {id: '2', name: '手机数码'},
+          {id: '3', name: '家用家电'},
+          {id: '4', name: '电脑办公'}
+        ]
+      }
+    },
+    methods: {
+      btnClick(item) {
+        this.$emit('itemclick', item);
+      }
+    }
+  }
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn
+    },
+    methods: {
+      cpnclick(item) {
+        console.log('cpnclick',item);
+      }
+    }
+  })
+</script>
+```
+
