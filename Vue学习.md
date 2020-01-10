@@ -1984,3 +1984,54 @@ data之所以是一个函数, 是为了避免一个组件多用的时候会出�
 ![具名插槽1](/../img/具名插槽1.png)
 
 具名插槽用于替换有`name`属性的`<slot></slot>`, 这个就可以更加灵活的使用组件
+
+### 作用域插槽
+
+```html
+<div id="app">
+  <cpn></cpn>
+  <cpn>
+    <template v-slot="slot">
+      <span v-for="item in slot.data">{{item}} - </span>
+    </template>
+  </cpn>
+  <cpn>
+    <template slot-scope="slot">
+      <span>{{slot.data.join(' * ')}}</span>
+    </template>
+  </cpn>
+</div>
+<template id="cpn">
+  <div>
+    <slot :data="pLanguages">
+      <ul>
+        <li v-for="item in pLanguages">{{item}}</li>
+      </ul>
+    </slot>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+    },
+    components: {
+      cpn: {
+        template: '#cpn',
+        data() {
+          return {
+            pLanguages: ['Java', 'Python', 'Vue', 'PHP']
+          }
+        }
+      }
+    }
+  })
+</script>
+```
+
+作用域插槽: 父组件替换插槽的标签, 但是其内容由子组件决定. **这里唯一需要注意的就是将子组件的数据传入到父组件中让后由父组件指定的展示方式将数据展示出来**.
+
+小知识: `slot.data.join(' * ')`中的`this.data.join('-')`是将数组中的元素以指定的字符隔开
+
+**注意**: `v-slot`在新版本中已经替代了slot-scope
