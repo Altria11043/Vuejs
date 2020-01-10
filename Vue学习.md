@@ -1299,7 +1299,7 @@ select在后面很少用到, 这里只是留个印象.
 
 通常情况下如果不使用`trim`后台会接收输入框中完整的数据, 当然空格也是一样的, 如果不想要前后的空格就可以使`trim`修饰符进行修饰.
 
-# 组件
+## 组件
 
 ### 什么是组件
 
@@ -1736,7 +1736,7 @@ data之所以是一个函数, 是为了避免一个组件多用的时候会出�
 1. 父组件访问子组件: 使用$children或$refs (reference引用)
 2. 子组件访问父组件: 使用$parent
 
-#### 父组件访问子组件代码
+#### 父组件访问子组件
 
 ##### children
 
@@ -1840,3 +1840,147 @@ data之所以是一个函数, 是为了避免一个组件多用的时候会出�
 
 `$refs`可以使用`ref='a'`对每一个子组件进行标定. 如果要调用哪个子组件的方法可以直接调用不受下标的影响.也是比较常用的方法之一.
 
+#### 子组件访问父组件
+
+```html
+<div id="app">
+  <cpn></cpn>
+</div>
+<template id="cpn1">
+  <div>
+    <cpn2></cpn2>
+  </div>
+</template>
+<template id="cpn2">
+  <div>
+    <button @click="btnclick">按钮</button>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const cpn = {
+    template: '#cpn1',
+    data() {
+      return {
+        name: 'Zhou',
+      }
+    },
+    components: {
+      cpn2: {
+        template: '#cpn2',
+        methods: {
+          btnclick() {
+            console.log(this.$parent);
+            console.log(this.$parent.name);
+            console.log(this.$root);
+            console.log(this.$root.message);
+          }
+        }
+      }
+    }
+  }
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn
+    }
+  })
+</script>
+```
+
+![子组件访问父组件](/../img/子组件访问父组件.png)
+
+子组件可以通过`$parent`访问父组件中的方法和元素, 可以通过`$root`访问根组件的方法和元素.
+
+但是这里并**不推荐**使用这些方法, 为了保证子组件的低耦合, 不能让子组件对外有太多操作
+
+## 插槽
+
+### 插槽的基本使用
+
+```html
+<div id="app">
+  <cpn></cpn>
+  <cpn>
+    <span>替换内容span</span>
+  </cpn>
+  <cpn>
+    <ul>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+    </ul>
+  </cpn>
+  <cpn></cpn>
+</div>
+<template id="cpn">
+  <div>
+    <h2>组件标题</h2>
+    <p>组件内容</p>
+    <slot>
+      <button>按钮</button>
+    </slot>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn: {
+        template: '#cpn',
+      }
+    }
+  })
+</script>
+```
+
+插槽的存在就和电脑上的usb接口一样, 需要什么样的东西就插什么东西上去.
+
+这里在组件中先使用`<slot></slot>`给组件预留一个插槽的位置, 保证组件在根组件中可以将其他标签插入.
+
+也可以在`<slot>
+      <button>按钮</button>
+    </slot>`添加默认值, 如果在组件中不填写其他标签, 就使用默认标签
+
+### 具名插槽的使用
+
+```html
+<div id="app">
+  <cpn>
+    <span slot="center">标题</span>
+    <button slot="left">按钮</button>
+  </cpn>
+</div>
+<template id="cpn">
+  <div>
+    <slot name="left"><span>左边</span></slot>
+    <slot name="center"><span>中间</span></slot>
+    <slot name="right"><span>右边</span></slot>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn: {
+        template: '#cpn',
+      }
+    }
+  })
+</script>
+```
+
+![具名插槽1](/../img/具名插槽1.png)
+
+具名插槽用于替换有`name`属性的`<slot></slot>`, 这个就可以更加灵活的使用组件

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>组件通信-子组件访问父组件</title>
+</head>
+<body>
+<div id="app">
+  <cpn></cpn>
+</div>
+<template id="cpn1">
+  <div>
+    <cpn2></cpn2>
+  </div>
+</template>
+<template id="cpn2">
+  <div>
+    <button @click="btnclick">按钮</button>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const cpn = {
+    template: '#cpn1',
+    data() {
+      return {
+        name: 'Zhou',
+      }
+    },
+    components: {
+      cpn2: {
+        template: '#cpn2',
+        methods: {
+          btnclick() {
+            console.log(this.$parent);
+            console.log(this.$parent.name);
+            console.log(this.$root);
+            console.log(this.$root.message);
+          }
+        }
+      }
+    }
+  }
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn
+    }
+  })
+</script>
+</body>
+</html>

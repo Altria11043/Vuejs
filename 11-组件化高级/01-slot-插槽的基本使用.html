@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>slot-插槽的基本使用</title>
+</head>
+<body>
+<div id="app">
+  <cpn></cpn>
+  <cpn>
+    <span>替换内容span</span>
+  </cpn>
+  <cpn>
+    <ul>
+      <li>1</li>
+      <li>2</li>
+      <li>3</li>
+    </ul>
+  </cpn>
+  <cpn></cpn>
+</div>
+
+<template id="cpn">
+  <div>
+    <h2>组件标题</h2>
+    <p>组件内容</p>
+    <slot>
+      <button>按钮</button>
+    </slot>
+  </div>
+</template>
+<script src="../js/vue.js"></script>
+<script>
+  const app = new Vue({
+    el: '#app',
+    data: {
+      message: '你好',
+    },
+    components: {
+      cpn: {
+        template: '#cpn',
+      }
+    }
+  })
+</script>
+</body>
+</html>
